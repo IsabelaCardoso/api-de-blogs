@@ -1,11 +1,13 @@
 defmodule ApiDeBlogsWeb.UsersController do
   use ApiDeBlogsWeb, :controller
 
-  def index(conn, _params) do
-    text(conn, "Welcome to API de Blogs")
-  end
+  alias ApiDeBlogs
 
   def create(conn, params) do
-
+    with {:ok, user} <- ApiDeBlogs.create_user(params) do
+      conn
+      |> put_status(:created)
+      |> render("created.json", user: user)
+    end
   end
 end

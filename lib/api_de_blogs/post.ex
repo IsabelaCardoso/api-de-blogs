@@ -1,4 +1,4 @@
-defmodule ApiDeBlogs.Posts do
+defmodule ApiDeBlogs.Post do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -19,8 +19,8 @@ defmodule ApiDeBlogs.Posts do
   schema "posts" do
     field(:title, :string, null: false)
     field(:content, :string, null: false)
-    # field(:userId, Ecto.UUID, null: false)
-    belongs_to(:userId, User)
+    field(:userId, Ecto.UUID, null: false)
+    # belongs_to(:userId, User)
 
     timestamps()
   end

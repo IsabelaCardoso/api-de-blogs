@@ -7,6 +7,7 @@ defmodule ApiDeBlogsWeb.FallbackController do
 
   def call(conn, {:error, %{errors: errors} = result}) do
     emailError = Tuple.to_list(errors[:email])
+
     cond do
       Enum.member?(emailError, "Usuário já existe") ->
         conn

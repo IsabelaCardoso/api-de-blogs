@@ -2,6 +2,7 @@ defmodule ApiDeBlogsWeb.Router do
   use ApiDeBlogsWeb, :router
 
   alias ApiDeBlogsWeb.UsersController
+  alias ApiDeBlogsWeb.LoginController
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -30,6 +31,7 @@ defmodule ApiDeBlogsWeb.Router do
   scope "/" do
     pipe_through :api
 
-    resources("/user", UsersController, only: [:index, :show, :create])
+    resources("/user", UsersController, only: [:index, :show, :create, :delete])
+    post("/login", LoginController, :login)
   end
 end

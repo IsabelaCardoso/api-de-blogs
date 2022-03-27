@@ -1,11 +1,9 @@
 defmodule ApiDeBlogsWeb.UsersView do
   use ApiDeBlogsWeb, :view
 
-  def render("created.json", %{user: user}) do
+  def render("created.json", %{token: token}) do
     %{
-      user: %{
-        email: user.email
-      }
+      token: token
     }
   end
 end

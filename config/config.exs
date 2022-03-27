@@ -26,6 +26,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :api_de_blogs, ApiDeBlogsWeb.Guardian,
+  issuer: "api_de_blogs",
+  secret_key: "YT8jHI40hGKd8ZXijl0c14qrupzMk6+o0KgyKJ2zVkxJTffzEyiUWrTcbDM6bUpr"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

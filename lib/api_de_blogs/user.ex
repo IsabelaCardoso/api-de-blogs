@@ -4,13 +4,22 @@ defmodule ApiDeBlogs.User do
 
   alias ApiDeBlogs.Repo
 
+  @type t :: %__MODULE__{
+          id: String.t(),
+          email: String.t(),
+          password: String.t(),
+          image: String.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @primary_key {:id, Ecto.UUID, autogenerate: true}
 
   schema "users" do
-    field :displayName, :string
-    field :email, :string
-    field :password, :string
-    field :image, :string
+    field(:displayName, :string, null: false)
+    field(:email, :string, null: false)
+    field(:password, :string, null: false)
+    field(:image, :string, null: false)
     timestamps()
   end
 
@@ -20,6 +29,7 @@ defmodule ApiDeBlogs.User do
     |> changeset()
     |> Repo.insert()
   end
+
   def changeset(params) do
     %__MODULE__{}
     |> cast(params, @required_params)

@@ -41,5 +41,6 @@ defmodule ApiDeBlogsWeb.Router do
 
     # pipe_through :app_authorization
     get("/user", UsersController, :get_users)
+    get("/user/:id", UsersController, :get_user_by_id)
   end
 end

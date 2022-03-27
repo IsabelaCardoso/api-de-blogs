@@ -5,4 +5,5 @@ defmodule ApiDeBlogs do
   defdelegate login(params), to: User.Login, as: :call
   defdelegate delete_user(params), to: User.Delete, as: :call
   defdelegate get_users(), to: User.Show, as: :get_users
+  defdelegate get_user(id), to: User.Show, as: :get_user
 end

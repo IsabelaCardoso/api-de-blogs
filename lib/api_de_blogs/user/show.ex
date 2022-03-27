@@ -8,4 +8,9 @@ defmodule ApiDeBlogs.User.Show do
     # require IEx; IEx.pry
     {:ok, users}
   end
+
+  def get_user(id) do
+    user = Repo.get!(User, id)
+    {:ok, user}
+  end
 end

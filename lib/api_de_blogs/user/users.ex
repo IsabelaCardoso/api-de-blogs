@@ -28,6 +28,18 @@ defmodule ApiDeBlogs.User.Users do
     end
   end
 
+  def get_users() do
+    query = from(User)
+    users = Repo.all(query)
+    # require IEx; IEx.pry
+    {:ok, users}
+  end
+
+  def get_user(id) do
+    user = Repo.get!(User, id)
+    {:ok, user}
+  end
+
   defp valid_password?(password, encrypted_password),
   do: Bcrypt.verify_pass(password, encrypted_password)
 

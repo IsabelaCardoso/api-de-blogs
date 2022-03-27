@@ -42,7 +42,7 @@ defmodule ApiDeBlogsWeb.UsersController do
       {:ok, users} ->
         conn
         |> put_status(:created)
-        |> render("index.json", users: users[:users])
+        |> render("index.json", users: users)
 
       {:error, reason} ->
         # require IEx; IEx.pry

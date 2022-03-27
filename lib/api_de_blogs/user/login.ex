@@ -36,11 +36,6 @@ defmodule ApiDeBlogs.User.Login do
   defp new_session({:ok, _changeset} = struct), do: struct
   defp new_session({:error, _changeset} = error), do: error
 
-  def get_user(email) do
-    user = Repo.get!(User, email)
-    {:ok, user}
-  end
-
   defp valid_password?(password, encrypted_password),
     do: Bcrypt.verify_pass(password, encrypted_password)
 end

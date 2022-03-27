@@ -9,9 +9,8 @@ defmodule ApiDeBlogsWeb.PostsController do
 
   def create(conn, params) do
     with {:ok, session_token} = Auth.get_local_token(conn),
-    {:ok, claims} = ApiDeBlogsWeb.Guardian.decode_and_verify(session_token),
-    {:ok, id} = Auth.filter_decoded_token(claims) do
-
+         {:ok, claims} = ApiDeBlogsWeb.Guardian.decode_and_verify(session_token),
+         {:ok, id} = Auth.filter_decoded_token(claims) do
       case ApiDeBlogs.create_post(params, id) do
         {:ok, post} ->
           conn
@@ -23,5 +22,4 @@ defmodule ApiDeBlogsWeb.PostsController do
       end
     end
   end
-
 end

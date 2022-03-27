@@ -25,15 +25,13 @@ defmodule ApiDeBlogsWeb.UsersController do
     with {:ok, session_token} = Auth.get_local_token(conn),
          {:ok, claims} = ApiDeBlogsWeb.Guardian.decode_and_verify(session_token),
          {:ok, id} = Auth.filter_decoded_token(claims) do
-
       case ApiDeBlogs.delete_user(id) do
-        {:ok, _user} ->
+        {:ok, user} ->
           conn
           |> put_status(:no_content)
-          |> render("deleted.json")
+          |> render("deleted.json", %{user: user})
 
         {:error, reason} ->
-          require IEx; IEx.pry
           {:error, reason}
       end
     end

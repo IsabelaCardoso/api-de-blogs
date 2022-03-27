@@ -40,7 +40,8 @@ defmodule ApiDeBlogs.User do
     |> validate_length(:displayName, min: 8)
     |> validate_format(
       :email,
-      Regex.compile!("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"))
+      Regex.compile!("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
+    )
   end
 
   defp put_password_hash(

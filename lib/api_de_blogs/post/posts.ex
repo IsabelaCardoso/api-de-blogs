@@ -2,10 +2,10 @@ defmodule ApiDeBlogs.Post.Posts do
   alias ApiDeBlogs.{Repo, Post}
 
   def create(params, id) do
-    create_post = params
-    |> Map.put("userId", id)
-    |> Post.build()
-
+    create_post =
+      params
+      |> Map.put("userId", id)
+      |> Post.build()
 
     case create_post do
       {:ok, post} -> {:ok, post}

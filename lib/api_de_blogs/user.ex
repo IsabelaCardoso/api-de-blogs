@@ -31,8 +31,10 @@ defmodule ApiDeBlogs.User do
   end
 
   def debug(params) do
-    require IEx; IEx.pry()
+    # require IEx
+    # IEx.pry()
   end
+
   def changeset(params) do
     %__MODULE__{}
     |> cast(params, @required_params)
@@ -54,8 +56,11 @@ defmodule ApiDeBlogs.User do
     )
   end
 
-  defp put_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
+  defp put_password_hash(
+         %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
+       ) do
     hash = Bcrypt.hash_pwd_salt(password)
+
     changeset
     |> put_change(:password, hash)
   end

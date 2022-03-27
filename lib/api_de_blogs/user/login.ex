@@ -1,10 +1,19 @@
 defmodule ApiDeBlogs.User.Login do
   alias ApiDeBlogs.{Repo, User}
-  alias ApiDeBlogs.User.Show
 
-  def login(params) do
-    require IEx
-    IEx.pry()
+  import Ecto.Query
+
+  def call(%{"email" => email, "password" => password}) do
+    with {:ok, user} = get_user_by_email(email) do
+      case valid_password?(password, user.password) do
+        true ->
+          {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign(user.id)
+          {:ok, token}
+
+        false ->
+          "invalid password"
+      end
+    end
 
     # {:ok, claims} = MyApp.Guardian.decode_and_verify(params)
     # |> debug(claims)
@@ -14,16 +23,24 @@ defmodule ApiDeBlogs.User.Login do
     # |> new_session()
   end
 
+  def get_user_by_email(email) do
+    query =
+      from(users in User,
+        where: users.email == ^email
+      )
+
+    user = Repo.one(query)
+    {:ok, user}
+  end
+
   defp new_session({:ok, _changeset} = struct), do: struct
   defp new_session({:error, _changeset} = error), do: error
 
-  def get_user_by_email(%{email: email, password: password}) do
-    # query = from(user = user in User, where: user.email == ^email)
-    # Repo.one(query)
+  def get_user(email) do
+    user = Repo.get!(User, email)
+    {:ok, user}
   end
 
-  def debug(params) do
-    require IEx
-    IEx.pry()
-  end
+  defp valid_password?(password, encrypted_password),
+    do: Bcrypt.verify_pass(password, encrypted_password)
 end

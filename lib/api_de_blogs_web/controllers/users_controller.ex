@@ -32,4 +32,17 @@ defmodule ApiDeBlogsWeb.UsersController do
         {:error, reason}
     end
   end
+
+  def get_users(conn, params) do
+    case ApiDeBlogs.get_users() do
+      {:ok, users} ->
+        conn
+        |> put_status(:created)
+        |> render("index.json", users: users[:users])
+
+      {:error, reason} ->
+        # require IEx; IEx.pry
+        {:error, reason}
+    end
+  end
 end

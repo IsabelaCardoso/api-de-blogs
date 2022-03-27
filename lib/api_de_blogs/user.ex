@@ -27,33 +27,20 @@ defmodule ApiDeBlogs.User do
   def build(params) do
     params
     |> changeset()
+    |> put_password_hash()
     |> Repo.insert()
-  end
-
-  def debug(params) do
-    # require IEx
-    # IEx.pry()
   end
 
   def changeset(params) do
     %__MODULE__{}
     |> cast(params, @required_params)
-    |> unique_constraint(:email, name: :unique_email, message: "Usuário já existe")
-    |> validate_required(:password, message: "\"password\" is required")
-    |> validate_length(:password, min: 6, message: "\"password\" length must be 6 characters long")
-    |> put_password_hash()
-    |> validate_required(:displayName, message: "\"displayName\" is required")
-    |> validate_required(:email, message: "\"email\" is required")
-    |> validate_required(:image, message: "\"image\" is required")
-    |> validate_length(:displayName,
-      min: 8,
-      message: "\"displayName\" length must be at least 8 characters long"
-    )
+    |> unique_constraint(:email, name: :unique_email)
+    |> validate_required(@required_params)
+    |> validate_length(:password, min: 6)
+    |> validate_length(:displayName, min: 8)
     |> validate_format(
       :email,
-      Regex.compile!("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"),
-      message: "\"email\" must be a valid email"
-    )
+      Regex.compile!("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"))
   end
 
   defp put_password_hash(
@@ -64,4 +51,6 @@ defmodule ApiDeBlogs.User do
     changeset
     |> put_change(:password, hash)
   end
+
+  defp put_password_hash(changeset), do: changeset
 end

@@ -9,7 +9,7 @@ defmodule ApiDeBlogsWeb.UsersController do
   def create(conn, params) do
     case ApiDeBlogs.create_user(params) do
       {:ok, %{id: id, email: email}} ->
-        {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign([id, email])
+        {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign(id)
 
         conn
         |> put_status(:created)

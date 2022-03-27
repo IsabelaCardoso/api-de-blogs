@@ -3,6 +3,7 @@ defmodule ApiDeBlogsWeb.Router do
 
   alias ApiDeBlogsWeb.UsersController
   alias ApiDeBlogsWeb.LoginController
+  alias ApiDeBlogsWeb.PostsController
   alias ApiDeBlogsWeb
 
   pipeline :api do
@@ -43,5 +44,7 @@ defmodule ApiDeBlogsWeb.Router do
     get("/user", UsersController, :get_users)
     get("/user/:id", UsersController, :get_user_by_id)
     delete("/user/me", UsersController, :delete)
+
+    post("/post", PostsController, :create)
   end
 end

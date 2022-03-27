@@ -13,7 +13,6 @@ defmodule ApiDeBlogsWeb.LoginController do
         |> render("login.json", token: token)
 
       {:error, reason} ->
-        # require IEx; IEx.pry
         {:error, reason}
     end
   end

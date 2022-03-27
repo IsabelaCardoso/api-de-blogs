@@ -1,9 +1,8 @@
 defmodule ApiDeBlogs do
-  @moduledoc """
-  ApiDeBlogs keeps the contexts that define your domain
-  and business logic.
+  alias ApiDeBlogs.User
 
-  Contexts are also responsible for managing your data, regardless
-  if it comes from the database, an external API or others.
-  """
+  defdelegate create_user(params), to: User.Create, as: :call
+  defdelegate login(params), to: User.Login, as: :login
+  defdelegate delete_user(params), to: User.Delete, as: :call
+  defdelegate get_user(params), to: User.Show, as: :get_user
 end

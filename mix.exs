@@ -44,7 +44,8 @@ defmodule ApiDeBlogs.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 2.0"},
-      {:bcrypt_elixir, "~> 3.0"}
+      {:bcrypt_elixir, "~> 3.0"},
+      {:ex_machina, "~> 2.7.0", only: :test}
     ]
   end
 

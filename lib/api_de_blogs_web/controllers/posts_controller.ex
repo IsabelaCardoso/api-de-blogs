@@ -9,9 +9,8 @@ defmodule ApiDeBlogsWeb.PostsController do
 
   def create(conn, params) do
     with {:ok, session_token} = Auth.get_local_token(conn),
-    {:ok, claims} = ApiDeBlogsWeb.Guardian.decode_and_verify(session_token),
-    {:ok, id} = Auth.filter_decoded_token(claims) do
-
+         {:ok, claims} = Guardian.decode_and_verify(session_token),
+         {:ok, id} = Auth.filter_decoded_token(claims) do
       case ApiDeBlogs.create_post(params, id) do
         {:ok, post} ->
           conn
@@ -24,4 +23,27 @@ defmodule ApiDeBlogsWeb.PostsController do
     end
   end
 
+  def index(conn, params) do
+    case ApiDeBlogs.get_posts() do
+      {:ok, posts} ->
+        conn
+        |> put_status(:ok)
+        |> render("index.json", posts: posts)
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  def get_post_by_id(conn, %{"id" => id}) do
+    case ApiDeBlogs.get_post(id) do
+      {:ok, post} ->
+        conn
+        |> put_status(:ok)
+        |> render("post.json", post: post)
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
 end

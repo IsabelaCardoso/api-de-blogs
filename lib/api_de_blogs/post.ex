@@ -36,7 +36,8 @@ defmodule ApiDeBlogs.Post do
   def changeset(params) do
     %__MODULE__{}
     |> cast(params, @required_params)
-    |> validate_required(:title, message: "\"title\" is required")
-    |> validate_required(:content, message: "\"content\" is required")
+    |> validate_required(@required_params)
+    |> validate_length(:content, min: 1)
+    |> validate_length(:title, min: 1)
   end
 end

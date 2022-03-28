@@ -40,11 +40,12 @@ defmodule ApiDeBlogsWeb.Router do
     resources("/user", UsersController, only: [:create])
     post("/login", LoginController, :login)
 
-    # pipe_through :app_authorization
+    pipe_through :app_authorization
     get("/user", UsersController, :get_users)
     get("/user/:id", UsersController, :get_user_by_id)
     delete("/user/me", UsersController, :delete)
 
-    post("/post", PostsController, :create)
+    resources("/post", PostsController, only: [:index, :create, :update, :delete])
+    get("/post/:id", PostsController, :get_post_by_id)
   end
 end

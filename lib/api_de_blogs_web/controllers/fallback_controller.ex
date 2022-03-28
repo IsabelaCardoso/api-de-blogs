@@ -2,24 +2,52 @@ defmodule ApiDeBlogsWeb.FallbackController do
   use ApiDeBlogsWeb, :controller
 
   action_fallback ApiDeBlogsWeb.FallbackController
+  import Ecto.Changeset, only: [traverse_errors: 2]
 
   alias ApiDeBlogs
 
-  def call(conn, {:error, %{errors: errors} = result}) do
-    emailError = Tuple.to_list(errors[:email])
+  def call(conn, {:error, :user_already_exists}) do
+    conn
+    |> put_status(:conflict)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json", result: "Usuário já existe")
+  end
 
-    cond do
-      Enum.member?(emailError, "Usuário já existe") ->
-        conn
-        |> put_status(:conflict)
-        |> put_view(ApiDeBlogsWeb.ErrorView)
-        |> render("error.json", result: result)
+  def call(conn, {:error, {field, :is_required}}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json", result: "\"#{field}\" is required")
+  end
 
-      false ->
-        conn
-        |> put_status(:bad_request)
-        |> put_view(ApiDeBlogsWeb.ErrorView)
-        |> render("error.json", result: result)
-    end
+  def call(conn, {:error, :post_does_not_exist}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json", result: "Post não existe")
+  end
+
+  def call(conn, {:error, {field, :length_required, count}}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json",
+      result: "\"#{field}\" length must be at least #{count} characteres long"
+    )
+  end
+
+  def call(conn, {:error, {errors, :unknown_error}}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json", result: simplify_error_message(errors))
+  end
+
+  defp simplify_error_message(changeset) do
+    traverse_errors(changeset, fn {msg, opts} ->
+      Regex.replace(~r"%{(\w+)}", msg, fn _, key ->
+        opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
+      end)
+    end)
   end
 end

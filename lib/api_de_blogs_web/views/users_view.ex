@@ -22,7 +22,7 @@ defmodule ApiDeBlogsWeb.UsersView do
     render_many(users, UsersView, "user.json", as: :user)
   end
 
-  def render("deleted.json", _data) do
+  def render("deleted.json", %{users: _users}) do
     %{}
   end
 end

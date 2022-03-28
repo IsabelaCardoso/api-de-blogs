@@ -12,17 +12,21 @@ defmodule ApiDeBlogsWeb.ErrorView do
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.json" becomes
   # "Not Found".
-  def template_not_found(template, %{reason: reason} = assigns) do
+  def template_not_found(_template, %{reason: reason}) do
     %{message: reason}
   end
 
-  def render("401.json", %{result: result}) do
+  def template_not_found(template, _assigns) do
+    %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
+  end
+
+  def render("error.json", %{result: result}) do
     %{
       message: result
     }
   end
 
-  def render("error.json", %{result: result}) do
+  def render("401.json", %{result: result}) do
     %{
       message: result
     }

@@ -9,4 +9,5 @@ defmodule ApiDeBlogs do
   defdelegate get_user(id), to: Users, as: :get_user
 
   defdelegate create_post(params, id), to: Posts, as: :create
+  defdelegate get_posts(), to: Posts, as: :index
 end

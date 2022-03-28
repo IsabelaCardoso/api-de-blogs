@@ -43,4 +43,9 @@ defmodule ApiDeBlogsWeb.Plugs.Auth do
       |> halt
     end
   end
+
+  def filter_decoded_token(claims) do
+    [{_header, id}] = Enum.filter(claims, fn {header, _value} -> header == "sub" end)
+    {:ok, id}
+  end
 end

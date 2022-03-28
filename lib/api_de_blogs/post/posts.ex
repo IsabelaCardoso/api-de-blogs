@@ -1,5 +1,8 @@
 defmodule ApiDeBlogs.Post.Posts do
+
   alias ApiDeBlogs.{Repo, Post}
+  alias ApiDeBlogs
+  import Ecto.Query
 
   def create(params, id) do
     create_post =
@@ -10,6 +13,20 @@ defmodule ApiDeBlogs.Post.Posts do
     case create_post do
       {:ok, post} -> {:ok, post}
       {:error, %{errors: errors}} -> handle_error(errors)
+    end
+  end
+
+  def index() do
+    posts = Repo.all(from(Post))
+    posts_with_user = put_user_data_in_post(posts)
+    # require IEx; IEx.pry
+    {:ok, posts_with_user}
+  end
+
+  def put_user_data_in_post(posts) do
+    for post <- posts do
+      {:ok, user} = ApiDeBlogs.get_user(post.userId)
+      result = Map.put(post, :user, user)
     end
   end
 

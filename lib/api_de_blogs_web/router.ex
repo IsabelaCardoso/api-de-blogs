@@ -45,6 +45,6 @@ defmodule ApiDeBlogsWeb.Router do
     get("/user/:id", UsersController, :get_user_by_id)
     delete("/user/me", UsersController, :delete)
 
-    post("/post", PostsController, :create)
+    resources("/post", PostsController, only: [:index, :create, :update, :delete])
   end
 end

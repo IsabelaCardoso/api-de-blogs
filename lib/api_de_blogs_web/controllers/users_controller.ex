@@ -9,8 +9,8 @@ defmodule ApiDeBlogsWeb.UsersController do
 
   def create(conn, params) do
     case ApiDeBlogs.create_user(params) do
-      {:ok, %{id: id, email: email}} ->
-        {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign(id)
+      {:ok, %{id: id}} ->
+        {:ok, token, _} = Guardian.encode_and_sign(id)
 
         conn
         |> put_status(:created)
@@ -21,9 +21,9 @@ defmodule ApiDeBlogsWeb.UsersController do
     end
   end
 
-  def delete(conn, params) do
+  def delete(conn, _params) do
     with {:ok, session_token} = Auth.get_local_token(conn),
-         {:ok, claims} = ApiDeBlogsWeb.Guardian.decode_and_verify(session_token),
+         {:ok, claims} = Guardian.decode_and_verify(session_token),
          {:ok, id} = Auth.filter_decoded_token(claims) do
       case ApiDeBlogs.delete_user(id) do
         {:ok, user} ->
@@ -36,7 +36,7 @@ defmodule ApiDeBlogsWeb.UsersController do
     end
   end
 
-  def get_users(conn, params) do
+  def get_users(conn, _params) do
     case ApiDeBlogs.get_users() do
       {:ok, users} ->
         conn

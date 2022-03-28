@@ -1,5 +1,4 @@
 defmodule ApiDeBlogs.Post.Posts do
-
   alias ApiDeBlogs.{Repo, Post}
   alias ApiDeBlogs
   import Ecto.Query
@@ -24,7 +23,9 @@ defmodule ApiDeBlogs.Post.Posts do
 
   def show(id) do
     case Repo.get(Post, id) do
-      nil -> {:error, :post_does_not_exist}
+      nil ->
+        {:error, :post_does_not_exist}
+
       post ->
         [post_with_user] = put_user_data_in_post([post])
         {:ok, post_with_user}

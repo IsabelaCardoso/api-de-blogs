@@ -63,7 +63,13 @@ defmodule ApiDeBlogs.UserTest do
     test "when given valid params, insert user into database and return valid struct" do
       response = User.build(@valid_params)
 
-      valid_struct = {:ok, %ApiDeBlogs.User{displayName: "isabela cardoso", email: "email@test.com", image: "url.da.imagem"}}
+      valid_struct =
+        {:ok,
+         %ApiDeBlogs.User{
+           displayName: "isabela cardoso",
+           email: "email@test.com",
+           image: "url.da.imagem"
+         }}
 
       assert valid_struct = response
     end
@@ -71,25 +77,27 @@ defmodule ApiDeBlogs.UserTest do
     test "when given invalid params, returns an error" do
       response = User.build(@invalid_params)
 
-      error_response = {:error, %Ecto.Changeset{
-        changes: %{
-          displayName: "Isa",
-          email: "emailtestinvalido.com",
-          password: "123"
-        },
-        errors: [
-          email: {"has invalid format", [validation: :format]},
-          displayName:
-            {"should be at least %{count} character(s)",
-             [count: 8, validation: :length, kind: :min, type: :string]},
-          password:
-            {"should be at least %{count} character(s)",
-             [count: 6, validation: :length, kind: :min, type: :string]},
-          image: {"is invalid", [type: :string, validation: :cast]}
-        ],
-        data: %ApiDeBlogs.User{},
-        valid?: false
-      }}
+      error_response =
+        {:error,
+         %Ecto.Changeset{
+           changes: %{
+             displayName: "Isa",
+             email: "emailtestinvalido.com",
+             password: "123"
+           },
+           errors: [
+             email: {"has invalid format", [validation: :format]},
+             displayName:
+               {"should be at least %{count} character(s)",
+                [count: 8, validation: :length, kind: :min, type: :string]},
+             password:
+               {"should be at least %{count} character(s)",
+                [count: 6, validation: :length, kind: :min, type: :string]},
+             image: {"is invalid", [type: :string, validation: :cast]}
+           ],
+           data: %ApiDeBlogs.User{},
+           valid?: false
+         }}
 
       assert error_response = response
     end

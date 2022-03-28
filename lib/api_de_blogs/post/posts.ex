@@ -23,9 +23,12 @@ defmodule ApiDeBlogs.Post.Posts do
   end
 
   def show(id) do
-    post = Repo.get!(Post, id)
-    [post_with_user] = put_user_data_in_post([post])
-    {:ok, post_with_user}
+    case Repo.get(Post, id) do
+      nil -> {:error, :post_does_not_exist}
+      post ->
+        [post_with_user] = put_user_data_in_post([post])
+        {:ok, post_with_user}
+    end
   end
 
   def put_user_data_in_post(posts) do

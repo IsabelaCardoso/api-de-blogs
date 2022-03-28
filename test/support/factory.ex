@@ -9,4 +9,12 @@ defmodule ApiDeBlogs.Factory do
       image: "url.da.imagem"
     }
   end
+
+  def post_factory do
+    %ApiDeBlogs.Post{
+      title: "the super cool title",
+      content: "the not that cool content",
+      userId: "1234567"
+    }
+  end
 end

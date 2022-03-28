@@ -3,11 +3,14 @@ defmodule ApiDeBlogsWeb.Plugs.Auth do
   The Plug Authorization.
   """
   import Plug.Conn
+  alias ApiDeBlogsWeb.ErrorView
 
   def init(opts), do: opts
 
   def filter_session_token(conn) do
-    session_token = Enum.filter(conn.req_headers, fn {header, _value} -> header == "session-token" end)
+    session_token =
+      Enum.filter(conn.req_headers, fn {header, _value} -> header == "session-token" end)
+
     case session_token do
       [] -> {:error, "Token não encontrado"}
       [{"session-token", _}] -> {:ok, session_token}
@@ -19,7 +22,9 @@ defmodule ApiDeBlogsWeb.Plugs.Auth do
       {:ok, session_token} ->
         [{_key, token}] = session_token
         {:ok, token}
-      {:error, reason} -> {:error, reason}
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
@@ -31,16 +36,25 @@ defmodule ApiDeBlogsWeb.Plugs.Auth do
           {:error, _reason} -> {:error, "Token expirado ou inválido"}
         end
 
-        {:error, reason} -> {:error, reason}
-        end
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
   def call(conn, _opts) do
     case authenticated?(conn) do
-      {:ok, _token} -> conn
-      {:error, reason} -> conn
-      |> send_resp(401, reason)
-      |> halt
+      {:ok, _token} ->
+        conn
+
+      {:error, reason} ->
+        conn
+        |> put_status(:unauthorized)
+        |> Phoenix.Controller.put_view(ApiDeBlogsWeb.ErrorView)
+        |> Phoenix.Controller.render("401.json", %{reason: reason})
+        |> halt()
+
+        # |> send_resp(401, reason)
+        # |> halt
     end
   end
 

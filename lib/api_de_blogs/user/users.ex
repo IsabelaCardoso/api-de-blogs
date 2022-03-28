@@ -19,6 +19,7 @@ defmodule ApiDeBlogs.User.Users do
 
   def login(%{"email" => email, "password" => password}) do
     with {:ok, user} = get_user_by_email(email) do
+      # require IEx; IEx.pry
       case valid_password?(password, user.password) do
         true ->
           {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign(user.id)
@@ -47,7 +48,7 @@ defmodule ApiDeBlogs.User.Users do
   defp handle_response(response) do
     case response do
       {:ok, user} -> {:ok, user}
-      {:error, %{errors: errors}} -> debug(errors)
+      {:error, errors} -> {:error, errors}
     end
   end
 

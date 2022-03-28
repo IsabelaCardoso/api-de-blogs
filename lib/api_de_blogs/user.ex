@@ -9,6 +9,7 @@ defmodule ApiDeBlogs.User do
           email: String.t(),
           password: String.t(),
           image: String.t(),
+          displayName: String.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -27,7 +28,6 @@ defmodule ApiDeBlogs.User do
   def build(params) do
     params
     |> changeset()
-    |> put_password_hash()
     |> Repo.insert()
   end
 
@@ -37,6 +37,7 @@ defmodule ApiDeBlogs.User do
     |> unique_constraint(:email, name: :unique_email)
     |> validate_required(@required_params)
     |> validate_length(:password, min: 6)
+    |> put_password_hash()
     |> validate_length(:displayName, min: 8)
     |> validate_format(
       :email,

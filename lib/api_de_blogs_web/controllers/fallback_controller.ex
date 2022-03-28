@@ -24,7 +24,9 @@ defmodule ApiDeBlogsWeb.FallbackController do
     conn
     |> put_status(:bad_request)
     |> put_view(ApiDeBlogsWeb.ErrorView)
-    |> render("error.json", result: "\"#{field}\" length must be at least #{count} characteres long")
+    |> render("error.json",
+      result: "\"#{field}\" length must be at least #{count} characteres long"
+    )
   end
 
   def call(conn, {:error, {errors, :unknown_error}}) do

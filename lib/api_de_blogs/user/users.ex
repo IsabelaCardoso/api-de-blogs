@@ -4,16 +4,18 @@ defmodule ApiDeBlogs.User.Users do
   import Ecto.Query
 
   def create(params) do
-    create_user = params
-    |> User.build()
-    |> handle_response()
+    create_user =
+      params
+      |> User.build()
+      |> handle_response()
   end
 
   def delete(id) do
-    user = Repo.get!(User, id)
-    |> Repo.delete()
-    |> handle_response()
-    end
+    user =
+      Repo.get!(User, id)
+      |> Repo.delete()
+      |> handle_response()
+  end
 
   def login(%{"email" => email, "password" => password}) do
     with {:ok, user} = get_user_by_email(email) do
@@ -41,7 +43,7 @@ defmodule ApiDeBlogs.User.Users do
   end
 
   defp valid_password?(password, encrypted_password),
-  do: Bcrypt.verify_pass(password, encrypted_password)
+    do: Bcrypt.verify_pass(password, encrypted_password)
 
   defp handle_response(response) do
     # require IEx; IEx.pry
@@ -55,15 +57,15 @@ defmodule ApiDeBlogs.User.Users do
     # require IEx; IEx.pry
   end
 
-    def get_user_by_email(email) do
-      query =
-        from(users in User,
-          where: users.email == ^email
-        )
+  def get_user_by_email(email) do
+    query =
+      from(users in User,
+        where: users.email == ^email
+      )
 
-      user = Repo.one(query)
-      {:ok, user}
-    end
+    user = Repo.one(query)
+    {:ok, user}
+  end
 
   defp handle_error([{:email, {"has already been taken", _}}]) do
     {:error, :user_already_exists}
@@ -82,5 +84,4 @@ defmodule ApiDeBlogs.User.Users do
   defp handle_error(errors) do
     {:error, errors}
   end
-
 end

@@ -1,5 +1,4 @@
 defmodule ApiDeBlogs do
-
   alias ApiDeBlogs.Post.Posts
   alias ApiDeBlogs.User.Users
 

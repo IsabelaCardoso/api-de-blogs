@@ -3,6 +3,7 @@ defmodule ApiDeBlogsWeb.Plugs.Auth do
   The Plug Authorization.
   """
   import Plug.Conn
+  alias ApiDeBlogsWeb.ErrorView
 
   def init(opts), do: opts
 
@@ -39,8 +40,12 @@ defmodule ApiDeBlogsWeb.Plugs.Auth do
     case authenticated?(conn) do
       {:ok, _token} -> conn
       {:error, reason} -> conn
-      |> send_resp(401, reason)
-      |> halt
+      |> put_status(:unauthorized)
+      |> Phoenix.Controller.put_view(ApiDeBlogsWeb.ErrorView)
+      |> Phoenix.Controller.render("401.json", %{reason: reason})
+      |> halt()
+      # |> send_resp(401, reason)
+      # |> halt
     end
   end
 

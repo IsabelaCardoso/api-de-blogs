@@ -28,8 +28,7 @@ defmodule ApiDeBlogsWeb.UsersController do
       case ApiDeBlogs.delete_user(id) do
         {:ok, user} ->
           conn
-          |> put_status(:no_content)
-          |> render("deleted.json", %{user: user})
+          |> send_resp(:no_content, "")
 
         {:error, reason} ->
           {:error, reason}

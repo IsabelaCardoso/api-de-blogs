@@ -27,11 +27,22 @@ defmodule ApiDeBlogsWeb.PostsController do
     case ApiDeBlogs.get_posts() do
       {:ok, posts} ->
         conn
-        |> put_status(:created)
+        |> put_status(:ok)
         |> render("index.json", posts: posts)
 
       {:error, reason} ->
-        # require IEx; IEx.pry
+        {:error, reason}
+    end
+  end
+
+  def get_post_by_id(conn, %{"id" => id}) do
+    case ApiDeBlogs.get_post(id) do
+      {:ok, post} ->
+        conn
+        |> put_status(:ok)
+        |> render("post.json", post: post)
+
+      {:error, reason} ->
         {:error, reason}
     end
   end

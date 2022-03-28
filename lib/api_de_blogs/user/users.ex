@@ -33,7 +33,6 @@ defmodule ApiDeBlogs.User.Users do
   def get_users() do
     query = from(User)
     users = Repo.all(query)
-    # require IEx; IEx.pry
     {:ok, users}
   end
 
@@ -46,7 +45,6 @@ defmodule ApiDeBlogs.User.Users do
     do: Bcrypt.verify_pass(password, encrypted_password)
 
   defp handle_response(response) do
-    # require IEx; IEx.pry
     case response do
       {:ok, user} -> {:ok, user}
       {:error, %{errors: errors}} -> debug(errors)

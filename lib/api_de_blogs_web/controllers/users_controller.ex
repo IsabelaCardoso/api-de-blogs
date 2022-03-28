@@ -45,7 +45,6 @@ defmodule ApiDeBlogsWeb.UsersController do
         |> render("index.json", users: users)
 
       {:error, reason} ->
-        # require IEx; IEx.pry
         {:error, reason}
     end
   end

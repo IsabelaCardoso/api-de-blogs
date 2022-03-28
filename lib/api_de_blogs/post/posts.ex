@@ -19,8 +19,13 @@ defmodule ApiDeBlogs.Post.Posts do
   def index() do
     posts = Repo.all(from(Post))
     posts_with_user = put_user_data_in_post(posts)
-    # require IEx; IEx.pry
     {:ok, posts_with_user}
+  end
+
+  def show(id) do
+    post = Repo.get!(Post, id)
+    [post_with_user] = put_user_data_in_post([post])
+    {:ok, post_with_user}
   end
 
   def put_user_data_in_post(posts) do

@@ -46,5 +46,6 @@ defmodule ApiDeBlogsWeb.Router do
     delete("/user/me", UsersController, :delete)
 
     resources("/post", PostsController, only: [:index, :create, :update, :delete])
+    get("/post/:id", PostsController, :get_post_by_id)
   end
 end

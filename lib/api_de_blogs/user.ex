@@ -24,7 +24,8 @@ defmodule ApiDeBlogs.User do
     timestamps()
   end
 
-  @required_params [:displayName, :email, :password, :image]
+  @required_params [:displayName, :email, :password]
+  @optional_params [:image]
   def build(params) do
     params
     |> changeset()
@@ -33,7 +34,7 @@ defmodule ApiDeBlogs.User do
 
   def changeset(params) do
     %__MODULE__{}
-    |> cast(params, @required_params)
+    |> cast(params, @required_params ++ @optional_params)
     |> unique_constraint(:email, name: :unique_email)
     |> validate_required(@required_params)
     |> validate_length(:password, min: 6)

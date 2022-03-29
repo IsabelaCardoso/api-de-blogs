@@ -34,6 +34,20 @@ defmodule ApiDeBlogsWeb.FallbackController do
     |> render("error.json", result: "Post não existe")
   end
 
+  def call(conn, {:error, :user_does_not_exist}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json", result: "Usuário não existe")
+  end
+
+  def call(conn, {:error, {field, :invalid_format}}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json", result: "\"#{field}\" must be a valid #{field}")
+  end
+
   def call(conn, {:error, {field, :length_required, count}}) do
     conn
     |> put_status(:bad_request)
@@ -43,18 +57,10 @@ defmodule ApiDeBlogsWeb.FallbackController do
     )
   end
 
-  def call(conn, {:error, {errors, :unknown_error}}) do
+  def call(conn, {:error, _errors}) do
     conn
     |> put_status(:bad_request)
     |> put_view(ApiDeBlogsWeb.ErrorView)
-    |> render("error.json", result: simplify_error_message(errors))
-  end
-
-  defp simplify_error_message(changeset) do
-    traverse_errors(changeset, fn {msg, opts} ->
-      Regex.replace(~r"%{(\w+)}", msg, fn _, key ->
-        opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
-      end)
-    end)
+    |> render("error.json", result: "invalid params")
   end
 end

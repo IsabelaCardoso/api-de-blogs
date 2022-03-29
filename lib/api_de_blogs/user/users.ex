@@ -9,14 +9,17 @@ defmodule ApiDeBlogs.User.Users do
       |> User.build()
 
     case create_user do
-      {:ok, user} -> {:ok, user}
-      {:error, %{errors: errors}} -> handle_error(errors)
+      {:ok, user} ->
+        {:ok, user}
+
+      {:error, %{errors: errors}} ->
+        handle_error(errors)
     end
   end
 
   def delete(id) do
     user =
-      Repo.get!(User, id)
+      Repo.get(User, id)
       |> Repo.delete()
 
     case user do
@@ -26,15 +29,19 @@ defmodule ApiDeBlogs.User.Users do
   end
 
   def login(%{"email" => email, "password" => password}) do
-    with {:ok, user} = get_user_by_email(email) do
-      case valid_password?(password, user.password) do
-        true ->
-          {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign(user.id)
-          {:ok, token}
+    case get_user_by_email(email) do
+      {:ok, user} ->
+        case valid_password?(password, user.password) do
+          true ->
+            {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign(user.id)
+            {:ok, token}
 
-        false ->
-          "invalid password"
-      end
+          false ->
+            "invalid password"
+        end
+
+      {:error, %{errors: errors}} ->
+        handle_error(errors)
     end
   end
 
@@ -45,8 +52,13 @@ defmodule ApiDeBlogs.User.Users do
   end
 
   def get_user(id) do
-    user = Repo.get!(User, id)
-    {:ok, user}
+    case Repo.get!(User, id) do
+      nil ->
+        {:error, :user_does_not_exist}
+
+      user ->
+        {:ok, user}
+    end
   end
 
   defp valid_password?(password, encrypted_password),
@@ -69,6 +81,12 @@ defmodule ApiDeBlogs.User.Users do
   defp handle_error([{_field, {"can't be blank", _}}] = errors) do
     [{header, _id}] = errors
     {:error, {header, :is_required}}
+  end
+
+  defp handle_error([{_field, {"has invalid format", _}}] = errors) do
+    [{header, _id}] = errors
+
+    {:error, {header, :invalid_format}}
   end
 
   defp handle_error([{_field, {"should be at least %{count} character(s)", _}}] = errors) do

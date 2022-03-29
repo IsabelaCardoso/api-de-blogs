@@ -27,7 +27,6 @@ defmodule ApiDeBlogsWeb.UsersController do
          {:ok, id} = Auth.filter_decoded_token(claims) do
       case ApiDeBlogs.delete_user(id) do
         {:ok, user} ->
-          # require IEx; IEx.pry
           conn
           |> send_resp(:no_content, "")
 

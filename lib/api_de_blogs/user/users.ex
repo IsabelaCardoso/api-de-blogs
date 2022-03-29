@@ -27,7 +27,6 @@ defmodule ApiDeBlogs.User.Users do
 
   def login(%{"email" => email, "password" => password}) do
     with {:ok, user} = get_user_by_email(email) do
-      # require IEx; IEx.pry
       case valid_password?(password, user.password) do
         true ->
           {:ok, token, _} = ApiDeBlogsWeb.Guardian.encode_and_sign(user.id)
@@ -52,10 +51,6 @@ defmodule ApiDeBlogs.User.Users do
 
   defp valid_password?(password, encrypted_password),
     do: Bcrypt.verify_pass(password, encrypted_password)
-
-  def debug(params) do
-    # require IEx; IEx.pry
-  end
 
   def get_user_by_email(email) do
     query =

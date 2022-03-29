@@ -49,12 +49,9 @@ defmodule ApiDeBlogsWeb.Plugs.Auth do
       {:error, reason} ->
         conn
         |> put_status(:unauthorized)
-        |> Phoenix.Controller.put_view(ApiDeBlogsWeb.ErrorView)
+        |> Phoenix.Controller.put_view(ErrorView)
         |> Phoenix.Controller.render("401.json", %{reason: reason})
         |> halt()
-
-        # |> send_resp(401, reason)
-        # |> halt
     end
   end
 

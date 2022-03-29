@@ -35,7 +35,7 @@ defmodule ApiDeBlogs.Post.Posts do
   def put_user_data_in_post(posts) do
     for post <- posts do
       {:ok, user} = ApiDeBlogs.get_user(post.userId)
-      result = Map.put(post, :user, user)
+      Map.put(post, :user, user)
     end
   end
 
@@ -50,6 +50,6 @@ defmodule ApiDeBlogs.Post.Posts do
   end
 
   defp handle_error(errors) do
-    {:error, :bad_request}
+    {:error, errors}
   end
 end

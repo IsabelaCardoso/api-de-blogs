@@ -20,6 +20,13 @@ defmodule ApiDeBlogsWeb.FallbackController do
     |> render("error.json", result: "\"#{field}\" is required")
   end
 
+  def call(conn, {:error, {field, :bad_request}}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ApiDeBlogsWeb.ErrorView)
+    |> render("error.json", result: "\"#{field}\" is invalid")
+  end
+
   def call(conn, {:error, :post_does_not_exist}) do
     conn
     |> put_status(:not_found)

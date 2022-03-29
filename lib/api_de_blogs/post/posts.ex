@@ -44,6 +44,11 @@ defmodule ApiDeBlogs.Post.Posts do
     {:error, {header, :is_required}}
   end
 
+  defp handle_error([{_title, {"is invalid", _}}] = errors) do
+    [{header, _id}] = errors
+    {:error, {header, :bad_request}}
+  end
+
   defp handle_error(errors) do
     {:error, :bad_request}
   end

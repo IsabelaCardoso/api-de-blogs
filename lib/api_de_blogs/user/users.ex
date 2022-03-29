@@ -7,14 +7,22 @@ defmodule ApiDeBlogs.User.Users do
     create_user =
       params
       |> User.build()
-      |> handle_response()
+
+    case create_user do
+      {:ok, user} -> {:ok, user}
+      {:error, %{errors: errors}} -> handle_error(errors)
+    end
   end
 
   def delete(id) do
     user =
       Repo.get!(User, id)
       |> Repo.delete()
-      |> handle_response()
+
+    case user do
+      {:ok, user} -> {:ok, user}
+      {:error, %{errors: errors}} -> handle_error(errors)
+    end
   end
 
   def login(%{"email" => email, "password" => password}) do
@@ -44,13 +52,6 @@ defmodule ApiDeBlogs.User.Users do
 
   defp valid_password?(password, encrypted_password),
     do: Bcrypt.verify_pass(password, encrypted_password)
-
-  defp handle_response(response) do
-    case response do
-      {:ok, user} -> {:ok, user}
-      {:error, errors} -> {:error, errors}
-    end
-  end
 
   def debug(params) do
     # require IEx; IEx.pry

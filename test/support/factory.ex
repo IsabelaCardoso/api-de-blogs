@@ -14,7 +14,7 @@ defmodule ApiDeBlogs.Factory do
     %ApiDeBlogs.Post{
       title: "the super cool title",
       content: "the not that cool content",
-      userId: "1234567"
+      userId: "e8e2eb7e-7a27-4625-ad58-0e2dc62552b9"
     }
   end
 end

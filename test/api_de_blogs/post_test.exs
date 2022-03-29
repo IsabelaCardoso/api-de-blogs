@@ -5,12 +5,6 @@ defmodule ApiDeBlogs.PostTest do
 
   alias ApiDeBlogs.Post
 
-  @valid_params %{
-    "title" => "the super cool title",
-    "content" => "the not soo cool content",
-    "userId" => "b6111bc1-bf9a-424c-bb65-b5488517b14b"
-  }
-
   @invalid_params %{
     "title" => 123,
     "content" => true,
@@ -66,7 +60,14 @@ defmodule ApiDeBlogs.PostTest do
       }
 
       response = Post.build(valid_params)
-      valid_return = {:ok, %ApiDeBlogs.Post{content: "the not soo cool content", title: "the super cool title", userId: user.id}}
+
+      valid_return =
+        {:ok,
+         %ApiDeBlogs.Post{
+           content: "the not soo cool content",
+           title: "the super cool title",
+           userId: user.id
+         }}
 
       assert valid_return = response
     end
@@ -74,7 +75,19 @@ defmodule ApiDeBlogs.PostTest do
     test "when given invalid params, returns an error" do
       response = Post.build(@invalid_params)
 
-      error_changeset = {:error, %Ecto.Changeset{action: :insert, changes: %{}, errors: [title: {"is invalid", [type: :string, validation: :cast]}, content: {"is invalid", [type: :string, validation: :cast]}, userId: {"is invalid", [type: Ecto.UUID, validation: :cast]}], data: %ApiDeBlogs.Post{}, valid?: false}}
+      error_changeset =
+        {:error,
+         %Ecto.Changeset{
+           action: :insert,
+           changes: %{},
+           errors: [
+             title: {"is invalid", [type: :string, validation: :cast]},
+             content: {"is invalid", [type: :string, validation: :cast]},
+             userId: {"is invalid", [type: Ecto.UUID, validation: :cast]}
+           ],
+           data: %ApiDeBlogs.Post{},
+           valid?: false
+         }}
 
       assert error_changeset = response
     end

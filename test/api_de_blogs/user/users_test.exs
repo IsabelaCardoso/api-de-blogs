@@ -33,20 +33,19 @@ defmodule ApiDeBlogs.User.UsersTest do
       response = Users.create(@invalid_params)
 
       assert match?(
-               {:error,
-                %Ecto.Changeset{
-                  valid?: false,
-                  errors: [
-                    email: {"has invalid format", [validation: :format]},
-                    displayName:
-                      {"should be at least %{count} character(s)",
-                       [count: 8, validation: :length, kind: :min, type: :string]},
-                    password:
-                      {"should be at least %{count} character(s)",
-                       [count: 6, validation: :length, kind: :min, type: :string]},
-                    image: {"is invalid", [type: :string, validation: :cast]}
-                  ]
-                }},
+               {
+                 :error,
+                 [
+                   email: {"has invalid format", [validation: :format]},
+                   displayName:
+                     {"should be at least %{count} character(s)",
+                      [count: 8, validation: :length, kind: :min, type: :string]},
+                   password:
+                     {"should be at least %{count} character(s)",
+                      [count: 6, validation: :length, kind: :min, type: :string]},
+                   image: {"is invalid", [type: :string, validation: :cast]}
+                 ]
+               },
                response
              )
     end
